@@ -26,7 +26,7 @@ style_done.update(style_todo)
         Output("new-item", "value")
     ],
     [
-        # Triggered by the "Add" button, the new item name? and the "Clear Done" button
+        # Triggered by "Add" button, intro of new item or "Clear Done" button
         Input("add", "n_clicks"),
         Input("new-item", "n_submit"),
         Input("clear-done", "n_clicks")
@@ -35,6 +35,7 @@ style_done.update(style_todo)
         # State of the new item name, the list of items and the list of done items
         State("new-item", "value"),
         State({"index": ALL}, "children"),
+        # TODO Why type is done? How can I know that this is the value showing if the checkbox is checked?
         State({"index": ALL, "type": "done"}, "value")
     ]
 )
@@ -47,7 +48,7 @@ def edit_list(add, add2, clear, new_item, items, items_done):
     clearing = len([1 for i in triggered if i == "clear-done.n_clicks"])
     new_spec = [
         (text, done) for text, done in zip(items, items_done)
-        if not (clearing and done)
+        if not (clearing and done) # Remove done items if clearing
     ]
     if adding:
         new_spec.append((new_item, []))
